@@ -3,20 +3,17 @@ package sqldbhandle
 import (
 	"ConvSqlToMongo/userconfig"
 	"database/sql"
+	"fmt"
 	"log"
 )
 
-type CustSQLDB struct {
-	*sql.DB
-}
-
-func (db *CustSQLDB) GetTables() []string {
+func GetTables(db *sql.DB, sqlConfig userconfig.SQLConfig) []string {
 	var columnName []string
 	var tableName string
-	findTableQuery := "SELECT TABLE_NAME " +
-		" FROM INFORMATION_SCHEMA.TABLES " +
-		" WHERE TABLE_TYPE = 'BASE TABLE'" +
-		" AND TABLE_SCHEMA='dbName' "
+	findTableQuery := fmt.Sprintf("SELECT TABLE_NAME "+
+		" FROM INFORMATION_SCHEMA.TABLES "+
+		" WHERE TABLE_TYPE = 'BASE TABLE'"+
+		" AND TABLE_SCHEMA = '%s'", sqlConfig.SQLDB)
 	tableNameRows, err := db.Query(findTableQuery)
 	if err != nil {
 		log.Fatal("Could not find table columns")

@@ -21,7 +21,7 @@ func CreateTestFile(t *testing.T, testFileCnfgFilePath string, writeConf interfa
 }
 
 func TestSQLConfigStruct(t *testing.T) {
-	testSQLConfigToFile := sqlConfig{
+	testSQLConfigToFile := SQLConfig{
 		SQLURL:      "localhost",
 		SQLPort:     "3000",
 		SQLUsername: "testUserName",
@@ -30,7 +30,7 @@ func TestSQLConfigStruct(t *testing.T) {
 	}
 	testFileCnfgFilePath := writeConfigToTestFile(t, testSQLConfigToFile)
 	defer os.Remove(testFileCnfgFilePath)
-	testSQLConfigFromFile := getSQLConfig(testFileCnfgFilePath)
+	testSQLConfigFromFile := GetSQLConfig(testFileCnfgFilePath)
 	if !reflect.DeepEqual(testSQLConfigFromFile, testSQLConfigToFile) {
 		t.Fatal("user config sql structs were not equal ")
 	}
@@ -44,7 +44,7 @@ func TestMongoConfigStruct(t *testing.T) {
 	}
 	testFileCnfgFilePath := writeConfigToTestFile(t, testMongoToFile)
 	// defer os.Remove(testFileCnfgFilePath)
-	testMongoFromFile := getMongoConfig(testFileCnfgFilePath)
+	testMongoFromFile := GetMongoConfig(testFileCnfgFilePath)
 	testMongoToFile.ConnURL = testMongoToFile.createConn()
 
 	if !reflect.DeepEqual(testMongoToFile, testMongoFromFile) {

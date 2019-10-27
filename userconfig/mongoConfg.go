@@ -7,13 +7,13 @@ import (
 )
 
 type MongoDBConfig struct {
-	ConnURL string `json: "omitempty"`
-	URL     string `json: "MONGO_URL"`
-	Port    string `json: "MONGO_PORT"`
-	DB      string `json: "MONGO_DB"`
+	ConnURL string `json:",omitempty"`
+	URL     string `json:"MONGO_URL"`
+	Port    string `json:"MONGO_PORT"`
+	DB      string `json:"MONGO_DB"`
 }
 
-func getMongoConfig(filepath string) MongoDBConfig {
+func GetMongoConfig(filepath string) MongoDBConfig {
 	mongo := new(MongoDBConfig)
 	configFileReader, err := os.Open(filepath)
 	defer configFileReader.Close()

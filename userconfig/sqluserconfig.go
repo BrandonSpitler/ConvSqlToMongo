@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-type sqlConfig struct {
+type SQLConfig struct {
 	SQLURL      string `json:"MYSQL_URL"`
 	SQLPort     string `json:"MYSQL_PORT"`
 	SQLUsername string `json:"MYSQL_USER"`
@@ -14,8 +14,8 @@ type sqlConfig struct {
 	SQLDB       string `json:"MYSQL_DB"`
 }
 
-func getSQLConfig(filepath string) sqlConfig {
-	sql := new(sqlConfig)
+func GetSQLConfig(filepath string) SQLConfig {
+	sql := new(SQLConfig)
 	configFileReader, err := os.Open(filepath)
 	defer configFileReader.Close()
 	if err != nil {
@@ -28,11 +28,11 @@ func getSQLConfig(filepath string) sqlConfig {
 	return *sql
 }
 
-func (s sqlConfig) createSQLURL() string {
+func (s SQLConfig) createSQLURL() string {
 	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", s.SQLUsername, s.SQLPWD, s.SQLURL, s.SQLPort, s.SQLDB)
 }
 
 func CreateSQLConnString(filepath string) string {
-	sqlCnfg := getSQLConfig(filepath)
+	sqlCnfg := GetSQLConfig(filepath)
 	return sqlCnfg.createSQLURL()
 }
