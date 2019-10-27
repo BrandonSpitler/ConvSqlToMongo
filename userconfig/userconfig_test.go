@@ -20,7 +20,7 @@ func CreateTestFile(t *testing.T, testFileCnfgFilePath string, testSQLConfig sql
 	json.NewEncoder(testConfFile).Encode(&testSQLConfig)
 }
 
-func TestSQLConfig(t *testing.T) {
+func TestSQLConfigStruct(t *testing.T) {
 	testSQLConfigToFile := sqlConfig{
 		SQLURL:      "localhost",
 		SQLPort:     "3000",
