@@ -14,7 +14,7 @@ var (
 )
 
 func initSQL() {
-
+	//test
 	// sqlPort = getENVElsePanic("MYSQL_PORT")
 	// sqlUsername = getENVElsePanic("MYSQL_USER")
 	// sqlPWD = getENVElsePanic("MYSQL_PWD")
