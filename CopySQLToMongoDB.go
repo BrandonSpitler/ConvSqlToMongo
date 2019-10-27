@@ -41,6 +41,7 @@ func CopySQLTOMongo(sqlDB *sql.DB,
 
 		go func(tableName string, mongoSession *mgo.Session, mongoDB string) {
 			collection := mongoSession.DB(mongoDBConf.DB).C(tableName)
+			defer mongoSession.Close()
 			// mongoCollection := mongoDataBase.C(tableName)
 			sqlQuery := fmt.Sprintf("SELECT * FROM %s", tableName)
 			sqlTable, err := sqlDB.Query(sqlQuery)
