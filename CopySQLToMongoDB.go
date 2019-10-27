@@ -39,7 +39,7 @@ func CopySQLTOMongo(sqlDB *sql.DB,
 	wgSQLWriter.Add(len(tableNames))
 	for _, tableName := range tableNames {
 		col := mongoDataBase.C(tableName)
-		func(tableName string, collection *mgo.Collection) {
+		go func(tableName string, collection *mgo.Collection) {
 			// mongoCollection := mongoDataBase.C(tableName)
 			sqlQuery := fmt.Sprintf("SELECT * FROM %s", tableName)
 			sqlTable, err := sqlDB.Query(sqlQuery)
