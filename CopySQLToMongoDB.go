@@ -33,13 +33,14 @@ func CopySQLTOMongo(sqlDB *sql.DB,
 	mongoSession *mgo.Session,
 	mongoDBConf userconfig.MongoDBConfig,
 	sqlConfig userconfig.SQLConfig) {
-	mongoDataBase := mongoSession.DB(mongoDBConf.DB)
+
 	var wgSQLWriter sync.WaitGroup
 	tableNames := sqldbhandle.GetTables(sqlDB, sqlConfig)
 	wgSQLWriter.Add(len(tableNames))
 	for _, tableName := range tableNames {
-		col := mongoDataBase.C(tableName)
-		go func(tableName string, collection *mgo.Collection) {
+
+		go func(tableName string, mongoSession *mgo.Session, mongoDB string) {
+			collection := mongoSession.DB(mongoDBConf.DB).C(tableName)
 			// mongoCollection := mongoDataBase.C(tableName)
 			sqlQuery := fmt.Sprintf("SELECT * FROM %s", tableName)
 			sqlTable, err := sqlDB.Query(sqlQuery)
@@ -66,7 +67,7 @@ func CopySQLTOMongo(sqlDB *sql.DB,
 				}
 			}
 			wgSQLWriter.Done()
-		}(tableName, col)
+		}(tableName, mongoSession.Copy(), mongoDBConf.DB)
 
 	}
 	wgSQLWriter.Wait()
