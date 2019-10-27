@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func CreateTestFile(t *testing.T, testFileCnfgFilePath string, testSQLConfig sqlConfig) {
+func CreateTestFile(t *testing.T, testFileCnfgFilePath string, writeConf interface{}) {
 
 	//create test file
 
@@ -17,7 +17,7 @@ func CreateTestFile(t *testing.T, testFileCnfgFilePath string, testSQLConfig sql
 	if err != nil {
 		t.Fatal("could not create testconfig.json for testing file config")
 	}
-	json.NewEncoder(testConfFile).Encode(&testSQLConfig)
+	json.NewEncoder(testConfFile).Encode(&writeConf)
 }
 
 func TestSQLConfigStruct(t *testing.T) {
@@ -28,11 +28,32 @@ func TestSQLConfigStruct(t *testing.T) {
 		SQLPWD:      "testPWD",
 		SQLDB:       "testDB",
 	}
-	testFileCnfgFilePath := "testconfig.json"
+	testFileCnfgFilePath := writeConfigToTestFile(t, testSQLConfigToFile)
 	defer os.Remove(testFileCnfgFilePath)
-	CreateTestFile(t, testFileCnfgFilePath, testSQLConfigToFile)
 	testSQLConfigFromFile := getSQLConfig(testFileCnfgFilePath)
 	if !reflect.DeepEqual(testSQLConfigFromFile, testSQLConfigToFile) {
-		t.Fatal("user config structs were not equal ")
+		t.Fatal("user config sql structs were not equal ")
 	}
+}
+
+func TestMongoConfigStruct(t *testing.T) {
+	testMongoToFile := MongoDBConfig{
+		URL:  "localhost",
+		Port: "27017",
+		DB:   "personnel",
+	}
+	testFileCnfgFilePath := writeConfigToTestFile(t, testMongoToFile)
+	// defer os.Remove(testFileCnfgFilePath)
+	testMongoFromFile := getMongoConfig(testFileCnfgFilePath)
+	testMongoToFile.ConnURL = testMongoToFile.createConn()
+
+	if !reflect.DeepEqual(testMongoToFile, testMongoFromFile) {
+		t.Fatal("user mongdb config structs were not equal ")
+	}
+}
+
+func writeConfigToTestFile(t *testing.T, write interface{}) string {
+	testFileCnfgFilePath := "testconfig.json"
+	CreateTestFile(t, testFileCnfgFilePath, write)
+	return testFileCnfgFilePath
 }

@@ -1,4 +1,4 @@
-package sqldbhandler
+package sqldbhandle
 
 import (
 	"ConvSqlToMongo/userconfig"

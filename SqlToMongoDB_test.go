@@ -19,7 +19,6 @@ var (
 func TestSQL(t *testing.T) {
 	sqlConnStr = userconfig.CreateSQLConnString("sqlConfig.json")
 	sqlDB, err := sql.Open("mysql", sqlConnStr)
-	sqlDB.
 	if err != nil {
 		t.Fatal("could not connect to sql db", sqlConnStr)
 	}
